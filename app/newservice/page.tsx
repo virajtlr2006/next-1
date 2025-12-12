@@ -39,7 +39,7 @@ const page = () => {
             const newdata = { ...data, email: email || "" }
             //📞 Call New Service Action to add service
             await CreateServiceAction(newdata)
-            router.push('/')
+            router.push('/allservice')
         } catch (error) {
             //‼️ Set Error Message to isError Variable
             setIsError("Error adding service")

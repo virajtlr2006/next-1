@@ -14,6 +14,7 @@ const page = () => {
     // ℹ️State to hold the service details
     const [services, setservices] = useState<service | null>(null)
     const [isOwner, setIsOwner] = useState(false)
+    const [errorMessage, seterrorMessage] = useState<string | null>(null)
 
     const router = useRouter()
 
@@ -46,7 +47,6 @@ const page = () => {
             console.error("Could not fetch the service", error);
         }
     }
-
 
     // Delete service function
     const deleteService = async (id: string) => {
@@ -85,8 +85,7 @@ const page = () => {
                           bg-gradient-to-r from-red-500 to-pink-500 
                           text-white px-6 py-3 rounded-xl font-semibold 
                           flex items-center gap-2 hover:opacity-90 transition-all
-                        "
-                                >
+                        ">
                                     <Trash2 className="w-5 h-5" /> Delete
                                 </Button>
                             </DialogTrigger>
@@ -100,7 +99,7 @@ const page = () => {
                                 </DialogHeader>
 
                                 <Button
-                                // Delete service on click
+                                    // Delete service on click
                                     onClick={() => deleteService(String(services.service_id))}
                                     className="bg-red-600 hover:bg-red-700 text-white w-full mt-4"
                                 >
