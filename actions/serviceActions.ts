@@ -52,3 +52,15 @@ export const myServicesAction = async (email:string) => {
          return { success: false, message: "Could not fetch your services" }
     }
 }
+
+// Delete Service Action to delete a service by ID
+export const deleteServiceAction = async (id:string) => {
+    try {
+        // 👉Delete service based on id
+        const deleteService = await db.delete(serviceTable).where(eq(serviceTable.service_id, parseInt(id)))
+        return { success: true, message: "Service deleted successfully" }
+    } catch (error) {
+        // ‼️Handle error if deletion fails
+         return { success: false, message: "Could not delete the service" }
+    }
+}
