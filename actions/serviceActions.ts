@@ -15,3 +15,15 @@ export const newServiceAction = async (data:service) => {
          return { success: false, message: "Sign Up first to add Services" }
     }
 }
+
+// All Services Action to fetch all services
+export const allServicesAction = async () => {
+    try {
+        // 👉Fetch all services from database
+        const allservices = await db.select().from(serviceTable)
+        return allservices
+    } catch (error) {
+        // ‼️Handle error if fetching fails
+         return { success: false, message: "Could not fetch services" }
+    }
+}
