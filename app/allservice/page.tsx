@@ -34,8 +34,6 @@ const page = () => {
         setFetchallServices(all)
     }
 
-
-
     return (
         <div>
             <h1 className='text-2xl'>Explore all services at a single spot</h1>

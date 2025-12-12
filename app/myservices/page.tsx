@@ -14,7 +14,8 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { Trash2 } from 'lucide-react'
+import { Edit, Trash2 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
 const page = () => {
 
@@ -23,6 +24,8 @@ const page = () => {
 
     // Email of current user
     const { email } = useCurrentUser()
+
+    const router = useRouter()
 
     // 
     useEffect(() => {
@@ -54,6 +57,10 @@ const page = () => {
         }
     }
 
+        const UpdateService = async (id: string) => {
+        router.push(`/updateservice/${id}`)
+    }
+
     return (
         <div>
             {/* Services list */}
@@ -70,6 +77,17 @@ const page = () => {
                                     <p className="text-gray-700">{service.category}</p>
                                     <p className="text-green-600 font-bold">${service.price}</p>
                                 </a>
+
+                                 <Button
+                                onClick={() => UpdateService(String(services.at(0)?.service_id))}
+                                className="
+                      bg-gradient-to-r from-blue-500 to-cyan-500 
+                      text-white px-6 py-3 rounded-xl font-semibold 
+                      flex items-center gap-2 hover:opacity-90 transition-all
+                    "
+                            >
+                                <Edit className="w-5 h-5" /> Update Property
+                            </Button>
 
                                 <Dialog>
                                     <DialogTrigger asChild>

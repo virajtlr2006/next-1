@@ -1,11 +1,11 @@
 'use client';
 
-import { deleteServiceAction, singleServiceAction } from '@/actions/serviceActions';
+import { deleteServiceAction, singleServiceAction, updateServiceAction } from '@/actions/serviceActions';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { service } from '@/db/schema';
 import { useCurrentUser } from '@/hook/hook';
-import { Trash2 } from 'lucide-react';
+import { Edit, Trash2 } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 
@@ -61,6 +61,10 @@ const page = () => {
         }
     }
 
+    const UpdateService = async (id: string) => {
+        router.push(`/updateservice/${id}`)
+    }
+
     return (
         <div>
             {/* Back to all services link */}
@@ -76,38 +80,55 @@ const page = () => {
                     <p>Price: ${services.price}</p>
                     <p>Contact: {services.email}</p>
 
-                    {/* ➖ Delete button for owner */}
                     {isOwner &&
-                        <Dialog>
-                            <DialogTrigger asChild>
-                                <Button
-                                    className="
+
+                        <div>
+
+                            <Button
+                                onClick={() => UpdateService(String(services.service_id))}
+                                className="
+                      bg-gradient-to-r from-blue-500 to-cyan-500 
+                      text-white px-6 py-3 rounded-xl font-semibold 
+                      flex items-center gap-2 hover:opacity-90 transition-all
+                    "
+                            >
+                                <Edit className="w-5 h-5" /> Update Property
+                            </Button>
+
+
+                            {/* ➖ Delete button for owner */}
+
+                            <Dialog>
+                                <DialogTrigger asChild>
+                                    <Button
+                                        className="
                           bg-gradient-to-r from-red-500 to-pink-500 
                           text-white px-6 py-3 rounded-xl font-semibold 
                           flex items-center gap-2 hover:opacity-90 transition-all
                         ">
-                                    <Trash2 className="w-5 h-5" /> Delete
-                                </Button>
-                            </DialogTrigger>
+                                        <Trash2 className="w-5 h-5" /> Delete
+                                    </Button>
+                                </DialogTrigger>
 
-                            <DialogContent className="bg-[#0e1a2a] border border-white/20 text-white">
-                                <DialogHeader>
-                                    <DialogTitle className="text-red-400">Are you absolutely sure?</DialogTitle>
-                                    <DialogDescription className="text-slate-400">
-                                        This action is permanent and cannot be undone.
-                                    </DialogDescription>
-                                </DialogHeader>
+                                <DialogContent className="bg-[#0e1a2a] border border-white/20 text-white">
+                                    <DialogHeader>
+                                        <DialogTitle className="text-red-400">Are you absolutely sure?</DialogTitle>
+                                        <DialogDescription className="text-slate-400">
+                                            This action is permanent and cannot be undone.
+                                        </DialogDescription>
+                                    </DialogHeader>
 
-                                <Button
-                                    // Delete service on click
-                                    onClick={() => deleteService(String(services.service_id))}
-                                    className="bg-red-600 hover:bg-red-700 text-white w-full mt-4"
-                                >
-                                    Confirm Delete
-                                </Button>
+                                    <Button
+                                        // Delete service on click
+                                        onClick={() => deleteService(String(services.service_id))}
+                                        className="bg-red-600 hover:bg-red-700 text-white w-full mt-4"
+                                    >
+                                        Confirm Delete
+                                    </Button>
 
-                            </DialogContent>
-                        </Dialog>
+                                </DialogContent>
+                            </Dialog>
+                        </div>
                     }
                 </a>
 

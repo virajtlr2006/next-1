@@ -64,3 +64,15 @@ export const deleteServiceAction = async (id:string) => {
          return { success: false, message: "Could not delete the service" }
     }
 }
+
+// Update Service Action to update a service by ID
+export const updateServiceAction = async (id:string, data:Partial<service>) => {
+    try {
+        // 👉Update service based on id
+        const updateService = await db.update(serviceTable).set(data).where(eq(serviceTable.service_id, parseInt(id)))
+        return { success: true, message: "Service updated successfully" }
+    } catch (error) {
+        // ‼️Handle error if update fails
+         return { success: false, message: "Could not update the service" }
+    }
+}
