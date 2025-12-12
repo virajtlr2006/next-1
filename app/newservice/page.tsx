@@ -3,18 +3,21 @@
 import { newServiceAction } from '@/actions/serviceActions'
 import { service } from '@/db/schema'
 import { useCurrentUser } from '@/hook/hook'
-import { is } from 'drizzle-orm'
+import { useRouter } from "next/navigation"
 import React, { useState } from 'react'
 import { useForm, SubmitHandler } from "react-hook-form"
 
 const page = () => {
 
-    // Error stores in isError Variable
+    // ⏳UI State for Error Handling
     const [isError, setIsError] = useState<string | null>(null)
 
-    // Get Current User Email
+    // 🔄Get Current User Email
     const { email } = useCurrentUser()
     // console.log(email)
+
+    //🛬 Router for navigation
+    const router = useRouter()
 
     const {
         register,
@@ -32,12 +35,13 @@ const page = () => {
                 setIsError("SignUp first to add Services")
                 return
             }
-            // Add email to data
+            //➕ Add email to data
             const newdata = { ...data, email: email || "" }
-            // Call New Service Action to add service
+            //📞 Call New Service Action to add service
             await newServiceAction(newdata)
+            router.push('/')
         } catch (error) {
-            // Set Error Message to isError Variable
+            //‼️ Set Error Message to isError Variable
             setIsError("Error adding service")
         }
     }
@@ -62,10 +66,10 @@ const page = () => {
                 <input placeholder='Price' {...register("price", { required: true })} />
                 {errors.price && <span>This field is required</span>}
 
-                {/* Submit button to add a new service */}
+                {/* 👉Submit button to add a new service */}
                 <input type="submit" />
 
-                {/* Show error message in frontend if any  */}
+                {/* ‼️Show error message in frontend if any  */}
                 {isError && <p>{isError}</p>}
             </form>
         </div>
