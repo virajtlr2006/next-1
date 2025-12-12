@@ -1,6 +1,6 @@
 'use client'
 
-import { newServiceAction } from '@/actions/serviceActions'
+import { CreateServiceAction } from '@/actions/serviceActions'
 import { service } from '@/db/schema'
 import { useCurrentUser } from '@/hook/hook'
 import { useRouter } from "next/navigation"
@@ -27,7 +27,7 @@ const page = () => {
     } = useForm<service>()
 
     // New Service Function
-    const newService: SubmitHandler<service> = async (data: service) => {
+    const handleCtreateService: SubmitHandler<service> = async (data: service) => {
         // console.log(data)
         try {
             // If no email then show error
@@ -38,7 +38,7 @@ const page = () => {
             //➕ Add email to data
             const newdata = { ...data, email: email || "" }
             //📞 Call New Service Action to add service
-            await newServiceAction(newdata)
+            await CreateServiceAction(newdata)
             router.push('/')
         } catch (error) {
             //‼️ Set Error Message to isError Variable
@@ -49,7 +49,7 @@ const page = () => {
     return (
         <div>
             {/* Form for adding a new service */}
-            <form onSubmit={handleSubmit(newService)}>
+            <form onSubmit={handleSubmit(handleCtreateService)}>
 
                 <input placeholder='Service Name' {...register("service_name", { required: true })} />
                 {errors.service_name && <span>This field is required</span>}
