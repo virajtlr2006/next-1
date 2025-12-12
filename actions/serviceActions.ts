@@ -40,3 +40,15 @@ export const singleServiceAction = async (id:string) => {
          return { success: false, message: "Could not fetch the service" }
     }
 }
+
+// My Services Action to fetch services by email
+export const myServicesAction = async (email:string) => {
+    try {
+        // 👉Fetch services based on email
+        const myServices = await db.select().from(serviceTable).where(eq(serviceTable.email, email))
+        return myServices
+    } catch (error) {
+        // ‼️Handle error if fetching fails
+         return { success: false, message: "Could not fetch your services" }
+    }
+}
