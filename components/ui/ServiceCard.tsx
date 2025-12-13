@@ -41,7 +41,7 @@ const ServiceCard = ({ service, isOwner, onDelete }: ServiceCardProps) => {
       <div className="space-y-1 text-gray-700">
         <p><strong>Category:</strong> {service.category}</p>
         <p><strong>Description:</strong> {service.desc}</p>
-        <p><strong>Price:</strong> ₹{service.price}</p>
+        <p><strong>Price:</strong> ${service.price}</p>
         <p><strong>Contact:</strong> <a href={`mailto:${service.email}`}>{service.email}</a></p>
       </div>
 
@@ -87,6 +87,9 @@ const ServiceCard = ({ service, isOwner, onDelete }: ServiceCardProps) => {
           </Dialog>
         </div>
       )}
+      {!isOwner && (
+        <Button><a href={`/bookservice/${service.service_id}`}>Book Now</a></Button>
+      ) }
     </div>
   );
 };
