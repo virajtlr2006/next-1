@@ -23,7 +23,7 @@ const page = () => {
     // 🌐 Fetch All Services
     const fetchServices = async () => {
         // 🥡Fetch all services from the action
-        const all = await fetchservicesAction() as service[]
+        const all = await fetchservicesAction() as service[] || null
         // 🚀Set the fetched services to state
         setFetchallServices(all)
     }
@@ -32,7 +32,7 @@ const page = () => {
         <div>
             <h1 className='text-2xl'>Explore all services at a single spot</h1>
             {/* Mapped Services */}
-            {fetchallServices?.map((serviceItem) => (
+            {fetchallServices && fetchallServices?.map((serviceItem) => (
                 // Service Card Component
                 <a href={`/singleservice/${serviceItem.service_id}`} key={serviceItem.service_id}>
                     <FetchServiceCard
