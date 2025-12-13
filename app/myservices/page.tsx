@@ -73,6 +73,7 @@ const page = () => {
                         {services.map((service) => (
                             <li key={service.service_id} className="border p-4 mb-4 rounded">
                                 <a href={`/singleservice/${service.service_id}`} className="block hover:bg-gray-100 p-2 rounded group">
+                                    {/* Service Card Component */}
                                     <FetchServiceCard
                                         key={service.service_id}
                                         serviceItem={service}
@@ -83,6 +84,7 @@ const page = () => {
                                     />
                                 </a>
 
+                                {/* Update Button */}
                                 <Button
                                     onClick={() => UpdateService(String(services.at(0)?.service_id))}
                                     className="
@@ -93,6 +95,8 @@ const page = () => {
                                 >
                                     <Edit className="w-5 h-5" /> Update Property
                                 </Button>
+
+                                {/* Delete Button with Dialog */}
 
                                 <Dialog>
                                     <DialogTrigger asChild>

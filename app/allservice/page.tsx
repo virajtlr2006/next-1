@@ -33,6 +33,7 @@ const page = () => {
             <h1 className='text-2xl'>Explore all services at a single spot</h1>
             {/* Mapped Services */}
             {fetchallServices?.map((serviceItem) => (
+                // Service Card Component
                 <FetchServiceCard
                     key={serviceItem.service_id}
                     serviceItem={serviceItem}
@@ -41,6 +42,7 @@ const page = () => {
                     category={serviceItem.category}
                     price={serviceItem.price}
                 />
+                
             ))}
         </div>
     )

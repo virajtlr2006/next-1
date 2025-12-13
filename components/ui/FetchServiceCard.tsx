@@ -4,6 +4,7 @@ import { service } from '@/db/schema';
 import React from 'react'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from './card';
 
+// Props interface
 interface FetchServiceCardProps {
     serviceItem: service;
     service_image: string;
@@ -11,12 +12,14 @@ interface FetchServiceCardProps {
     category: string;
     price: number;
 }
-
+// FetchServiceCard component
 const FetchServiceCard = ({ serviceItem, service_image, service_name, category, price }: FetchServiceCardProps) => {
 
     return (
         <div>
+            {/* Service card */}
             {serviceItem &&
+            // Card component to display service details
                     <Card key={serviceItem.service_id}>
                         <CardHeader>
                             <CardTitle>{serviceItem.service_name}</CardTitle>
@@ -34,4 +37,5 @@ const FetchServiceCard = ({ serviceItem, service_image, service_name, category, 
     )
 }
 
+// Export component
 export default FetchServiceCard
