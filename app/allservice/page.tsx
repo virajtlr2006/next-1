@@ -3,14 +3,8 @@
 import { service } from '@/db/schema';
 import { useParams, useRouter } from 'next/navigation';
 import React, { use, useEffect, useState } from 'react'
-import {
-    Card,
-    CardContent,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card"
 import { fetchservicesAction } from '@/actions/serviceActions';
+import FetchServiceCard from '@/components/ui/FetchServiceCard';
 
 const page = () => {
 
@@ -39,20 +33,14 @@ const page = () => {
             <h1 className='text-2xl'>Explore all services at a single spot</h1>
             {/* Mapped Services */}
             {fetchallServices?.map((serviceItem) => (
-                <a key={serviceItem.service_id} href={`singleservice/${serviceItem.service_id}`} className='flex gap-10'>
-                    <Card key={serviceItem.service_id}>
-                        <CardHeader>
-                            <CardTitle>{serviceItem.service_name}</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <img className='h-50 w-50' src={serviceItem.service_image || ""} alt={serviceItem.service_name} />
-                        </CardContent>
-                        <CardFooter>
-                            <p>{serviceItem.category}</p>
-                            <p>Price: ${serviceItem.price}</p>
-                        </CardFooter>
-                    </Card>
-                </a>
+                <FetchServiceCard
+                    key={serviceItem.service_id}
+                    serviceItem={serviceItem}
+                    service_image={serviceItem.service_image || ""}
+                    service_name={serviceItem.service_name}
+                    category={serviceItem.category}
+                    price={serviceItem.price}
+                />
             ))}
         </div>
     )

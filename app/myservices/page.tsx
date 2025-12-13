@@ -16,6 +16,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Edit, Trash2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import FetchServiceCard from '@/components/ui/FetchServiceCard'
 
 const page = () => {
 
@@ -57,7 +58,7 @@ const page = () => {
         }
     }
 
-        const UpdateService = async (id: string) => {
+    const UpdateService = async (id: string) => {
         router.push(`/updateservice/${id}`)
     }
 
@@ -72,22 +73,26 @@ const page = () => {
                         {services.map((service) => (
                             <li key={service.service_id} className="border p-4 mb-4 rounded">
                                 <a href={`/singleservice/${service.service_id}`} className="block hover:bg-gray-100 p-2 rounded group">
-                                    <h2 className="text-xl font-semibold">{service.service_name}</h2>
-                                    <img src={service.service_image || "Image"} alt={service.service_name} className="w-32 h-32 object-cover my-2" />
-                                    <p className="text-gray-700">{service.category}</p>
-                                    <p className="text-green-600 font-bold">${service.price}</p>
+                                    <FetchServiceCard
+                                        key={service.service_id}
+                                        serviceItem={service}
+                                        service_image={service.service_image || ""}
+                                        service_name={service.service_name}
+                                        category={service.category}
+                                        price={service.price}
+                                    />
                                 </a>
 
-                                 <Button
-                                onClick={() => UpdateService(String(services.at(0)?.service_id))}
-                                className="
+                                <Button
+                                    onClick={() => UpdateService(String(services.at(0)?.service_id))}
+                                    className="
                       bg-gradient-to-r from-blue-500 to-cyan-500 
                       text-white px-6 py-3 rounded-xl font-semibold 
                       flex items-center gap-2 hover:opacity-90 transition-all
                     "
-                            >
-                                <Edit className="w-5 h-5" /> Update Property
-                            </Button>
+                                >
+                                    <Edit className="w-5 h-5" /> Update Property
+                                </Button>
 
                                 <Dialog>
                                     <DialogTrigger asChild>
