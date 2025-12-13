@@ -1,124 +1,158 @@
 "use client";
 
 import { service } from "@/db/schema";
+import { singleServiceAction, updateServiceAction } from "@/actions/serviceActions";
+import { Button } from "@/components/ui/button";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { singleServiceAction, updateServiceAction } from "@/actions/serviceActions";
-import { Button } from "@/components/ui/button";
 
-const Page = () => {
+const UpdateServicePage = () => {
+  // 📌 Get ID from URL
+  const params = useParams();
+  const id = params?.id as string;
 
-  // Get service ID from URL params
-  const { id } = useParams();
-
-  // 🛬Router for navigation
+  // 🚦 Router
   const router = useRouter();
 
-  // ⌛State to hold service data
-  const [services, setServices] = useState<service | null>(null);
+  // ⌛ Loading state
+  const [loading, setLoading] = useState(true);
 
-  // 🧾React Hook Form setup
-  const { register, handleSubmit, reset } = useForm<service>();
+  // 🧾 React Hook Form
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { isSubmitting },
+  } = useForm<service>();
 
-  // 👉 Fetch service & pre-fill form
+  // 🔄 Fetch service & prefill form
   const fetchService = async () => {
-    // Fetch Old Data from server action 
-    const single = await singleServiceAction(id as string) as service | null;
+    try {
+      const data = (await singleServiceAction(id)) as service | null;
 
-    if (single) {
-      // Set service data to state
-      setServices(single);
-      // Pre-fill form with fetched data
-      reset(single); 
+      if (!data) {
+        alert("Service not found");
+        router.push("/allservice");
+        return;
+      }
+
+      // 🔥 Reset form with existing values
+      reset({
+        service_name: data.service_name,
+        service_image: data.service_image ?? "",
+        category: data.category,
+        desc: data.desc,
+        price: data.price,
+      });
+
+      setLoading(false);
+    } catch (error) {
+      console.error("Fetch error:", error);
+      alert("Failed to load service");
+      router.push("/allservice");
     }
   };
 
   useEffect(() => {
-    fetchService();
+    if (id) fetchService();
   }, [id]);
 
-  // 👉 Submit updated values
-  const onSubmit = async (data: Partial<service>) => {
-    // Update service using server action
-    const result = await updateServiceAction(id as string, data);
+  // 🚀 Submit updated service
+  const onSubmit = async (formData: service) => {
+    try {
+      const payload = {
+        service_name: formData.service_name,
+        service_image: formData.service_image,
+        category: formData.category,
+        desc: formData.desc,
+        price: Number(formData.price), // 🔥 Ensure number
+      };
 
-    console.log(result)
-    // Handle response
-    if (result.success) {
-      // Success feedback & redirect
-      alert("Service updated!");
-      router.push("/allservice");
-    } else {
-      // Failure feedback
-      alert("Failed to update");
+      const res = await updateServiceAction(id, payload);
+
+      if (res.success) {
+        alert("Service updated successfully!");
+        router.push("/allservice");
+      } else {
+        alert(res.message || "Update failed");
+      }
+    } catch (error) {
+      console.error("Submit error:", error);
+      alert("Something went wrong");
     }
   };
 
-  // Loading state
-  if (!services) return <p>Loading...</p>;
+  // ⏳ Loading UI
+  if (loading) {
+    return <p className="text-center mt-10">Loading service...</p>;
+  }
 
   return (
-    <div>
-      <h1 >Update Service</h1>
+    <div className="max-w-xl mx-auto mt-10 p-6 border rounded-lg shadow">
+      <h1 className="text-2xl font-bold mb-6">Update Service</h1>
 
-{/* Form fields */}
-      <form onSubmit={handleSubmit(onSubmit)} >
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 
         {/* Service Name */}
         <div>
-          <label>Service Name</label>
+          <label className="block mb-1">Service Name</label>
           <input
-            {...register("service_name")}
-            defaultValue={services.service_name}
+            {...register("service_name", { required: true })}
+            className="w-full border p-2 rounded"
           />
         </div>
 
         {/* Service Image */}
         <div>
-          <label >Service Image URL</label>
+          <label className="block mb-1">Service Image URL</label>
           <input
             {...register("service_image")}
-            defaultValue={services.service_image || ""}
+            className="w-full border p-2 rounded"
           />
         </div>
 
         {/* Category */}
         <div>
-          <label >Category</label>
+          <label className="block mb-1">Category</label>
           <input
-            {...register("category")}
-            defaultValue={services.category}
+            {...register("category", { required: true })}
+            className="w-full border p-2 rounded"
           />
         </div>
 
         {/* Description */}
         <div>
-          <label >Description</label>
+          <label className="block mb-1">Description</label>
           <textarea
-            {...register("desc")}
-            defaultValue={services.desc}
-          ></textarea>
+            {...register("desc", { required: true })}
+            className="w-full border p-2 rounded"
+          />
         </div>
 
         {/* Price */}
         <div>
-          <label>Price</label>
+          <label className="block mb-1">Price</label>
           <input
             type="number"
-            {...register("price")}
-            defaultValue={services.price}
+            {...register("price", {
+              required: true,
+              valueAsNumber: true, // 🔥 KEY FIX
+            })}
+            className="w-full border p-2 rounded"
           />
         </div>
 
         <Button
           type="submit"
+          disabled={isSubmitting}
+          className="w-full"
         >
-          Update Service
+          {isSubmitting ? "Updating..." : "Update Service"}
         </Button>
       </form>
     </div>
   );
 };
 
-export default Page;
+export default UpdateServicePage;

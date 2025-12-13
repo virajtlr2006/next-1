@@ -66,13 +66,38 @@ export const deleteServiceAction = async (id:string) => {
 }
 
 // Update Service Action to update a service by ID
-export const updateServiceAction = async (id:string, data:Partial<service>) => {
-    try {
-        // 👉Update service based on id
-        const updateService = await db.update(serviceTable).set(data).where(eq(serviceTable.service_id, parseInt(id)))
-        return { success: true, message: "Service updated successfully" }
-    } catch (error) {
-        // ‼️Handle error if update fails
-         return { success: false, message: "Could not update the service" }
+export const updateServiceAction = async (id: string,data: Partial<service>) => {
+  try {
+    const updated = await db
+      .update(serviceTable)
+      .set({
+        service_name: data.service_name,
+        service_image: data.service_image,
+        category: data.category,
+        desc: data.desc,
+        price: data.price,
+      })
+      .where(eq(serviceTable.service_id, Number(id)))
+      .returning();
+
+    // console.log("🟢 UPDATE RESULT:", updated);
+
+    if (updated.length === 0) {
+      return {
+        success: false,
+        message: "Service not found",
+      };
     }
-}
+
+    return {
+      success: true,
+      message: "Service updated successfully",
+    };
+  } catch (error) {
+    console.error("❌ UPDATE SERVICE ERROR:", error);
+    return {
+      success: false,
+      message: "Could not update the service",
+    };
+  }
+};
