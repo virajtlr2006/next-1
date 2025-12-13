@@ -34,15 +34,16 @@ const page = () => {
             {/* Mapped Services */}
             {fetchallServices?.map((serviceItem) => (
                 // Service Card Component
-                <FetchServiceCard
-                    key={serviceItem.service_id}
-                    serviceItem={serviceItem}
-                    service_image={serviceItem.service_image || ""}
-                    service_name={serviceItem.service_name}
-                    category={serviceItem.category}
-                    price={serviceItem.price}
-                />
-                
+                <a href={`/singleservice/${serviceItem.service_id}`} key={serviceItem.service_id}>
+                    <FetchServiceCard
+                        key={serviceItem.service_id}
+                        serviceItem={serviceItem}
+                        service_image={serviceItem.service_image || ""}
+                        service_name={serviceItem.service_name}
+                        category={serviceItem.category}
+                        price={serviceItem.price}
+                    />
+                </a>
             ))}
         </div>
     )

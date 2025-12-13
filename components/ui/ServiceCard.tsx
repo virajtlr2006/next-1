@@ -42,7 +42,7 @@ const ServiceCard = ({ service, isOwner, onDelete }: ServiceCardProps) => {
         <p><strong>Category:</strong> {service.category}</p>
         <p><strong>Description:</strong> {service.desc}</p>
         <p><strong>Price:</strong> ₹{service.price}</p>
-        <p><strong>Contact:</strong> {service.email}</p>
+        <p><strong>Contact:</strong> <a href={`mailto:${service.email}`}>{service.email}</a></p>
       </div>
 
       {/* Owner Actions */}
