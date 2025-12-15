@@ -6,10 +6,6 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import { useCurrentUser } from '@/hook/hook'
 import { bookServiceAction } from '@/actions/bookServiceAction'
 
-/**
- * Frontend booking form type
- * (matches DB schema exactly)
- */
 type BookingForm = {
   booking_date: string
 }
@@ -43,12 +39,16 @@ const Book = () => {
       booking_date: formData.booking_date,
     }
 
+    //Booking data send to backend
     const result = await bookServiceAction(id, bookingData)
 
+    //If result is true service booked successfully
     if (result?.success) {
       alert('Service Booked Successfully')
       reset()
-    } else {
+    } 
+    //If booking failed
+    else {
       alert('Booking Failed')
     }
   }
