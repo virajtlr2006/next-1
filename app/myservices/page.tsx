@@ -3,146 +3,142 @@
 import { deleteServiceAction, myServicesAction } from '@/actions/serviceActions'
 import { service } from '@/db/schema'
 import { useCurrentUser } from '@/hook/hook'
-import { numeric } from 'drizzle-orm/pg-core'
 import { useEffect, useState } from 'react'
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { Edit, Trash2 } from 'lucide-react'
+import { Edit, Trash2, Search } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import FetchServiceCard from '@/components/ui/FetchServiceCard'
 
 const page = () => {
 
-    //⏳ State to hold services and error message
-    const [services, setservices] = useState<service[] | null>(null)
+  // ⏳ State to hold services
+  const [services, setServices] = useState<service[] | null>(null)
 
-    // Email of current user
-    const { email } = useCurrentUser()
+  // 🔍 Search state
+  const [searchService, setSearchService] = useState('')
 
-    const router = useRouter()
+  // Email of current user
+  const { email } = useCurrentUser()
 
-    // 
-    useEffect(() => {
-        // Fetch my services when email changes
-        myServices(email as string)
-    }, [email])
+  const router = useRouter()
 
-    // Function to fetch services by email
-    const myServices = async (email: string) => {
-        // console.log(email)
-
-        // ⁉️If no email, return early
-        if (!email) return
-        // 👉Fetched my services from my server action
-        const myfetchedServices = await myServicesAction(email) as service[]
-        // Set fetched services to state
-        setservices(myfetchedServices)
+  // 📥 Fetch services when email is available
+  useEffect(() => {
+    if (email) {
+      fetchMyServices(email)
     }
+  }, [email])
 
-    const deleteService = async (id: string) => {
-        // 👉Call delete service action
-        const deleteServiceResponse = await deleteServiceAction(id)
-        // ‼️If deletion fails, log error
-        if ((deleteServiceResponse as { success: boolean }).success === false) {
-            console.log((deleteServiceResponse as { message: string }).message)
-        } else {
-            // 🔄Refresh services list after deletion
-            myServices(email as string)
-        }
+  // 🌐 Fetch services by email
+  const fetchMyServices = async (email: string) => {
+    const myFetchedServices = await myServicesAction(email) as service[]
+    setServices(myFetchedServices)
+  }
+
+  // ❌ Delete service
+  const deleteService = async (id: string) => {
+    const response = await deleteServiceAction(id)
+    if ((response as { success: boolean }).success) {
+      fetchMyServices(email as string)
     }
+  }
 
-    const UpdateService = async (id: string) => {
-        router.push(`/updateservice/${id}`)
-    }
+  // ✏️ Update service
+  const updateService = (id: string) => {
+    router.push(`/updateservice/${id}`)
+  }
 
-    return (
-        <div>
-            {/* Services list */}
-            {services && services.length > 0 ? (
-                <div>
-                    <h1 className='text-2xl font-bold mb-4'>My Services</h1>
-                    <ul>
-                        {/* Service items */}
-                        {services.map((service) => (
-                            <li key={service.service_id} className="border p-4 mb-4 rounded">
-                                <a href={`/singleservice/${service.service_id}`} className="block hover:bg-gray-100 p-2 rounded group">
-                                    {/* Service Card Component */}
-                                    <FetchServiceCard
-                                        key={service.service_id}
-                                        serviceItem={service}
-                                        service_image={service.service_image || ""}
-                                        service_name={service.service_name}
-                                        category={service.category}
-                                        price={service.price}
-                                    />
-                                </a>
+  // 🔍 Filtered services logic
+  const filteredServices = services?.filter((serviceItem) =>
+    serviceItem.service_name
+      .toLowerCase()
+      .includes(searchService.toLowerCase())
+  )
 
-                                {/* Update Button */}
-                                <Button
-                                    onClick={() => UpdateService(String(services.at(0)?.service_id))}
-                                    className="
-                      bg-gradient-to-r from-blue-500 to-cyan-500 
-                      text-white px-6 py-3 rounded-xl font-semibold 
-                      flex items-center gap-2 hover:opacity-90 transition-all
-                    "
-                                >
-                                    <Edit className="w-5 h-5" /> Update Property
-                                </Button>
+  return (
+    <div className="p-6">
 
-                                {/* Delete Button with Dialog */}
+      <h1 className="text-2xl font-bold mb-4">My Services</h1>
 
-                                <Dialog>
-                                    <DialogTrigger asChild>
-                                        <button className="
-                          w-full py-2 px-4 
-                          bg-gradient-to-r from-red-500/20 to-red-600/20
-                          border border-red-500/40 
-                          text-red-300 rounded-lg font-semibold 
-                          hover:bg-red-600/30 hover:border-red-500/60 
-                          transition-all duration-300 group-hover:text-red-200
-                          flex items-center justify-center gap-2
-                        ">
-                                            <Trash2 className='w-4 h-4' /> Delete Service
-                                        </button>
-                                    </DialogTrigger>
+      {/* 🔍 Search Box */}
+      <div className="relative mb-6 max-w-md">
+        <input
+          type="search"
+          placeholder="Search My Services"
+          value={searchService}
+          onChange={(e) => setSearchService(e.target.value)}
+          className="w-full border p-2 pl-10 rounded"
+        />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+      </div>
 
-                                    <DialogContent>
-                                        <DialogHeader>
-                                            <DialogTitle>Are you absolutely sure?</DialogTitle>
-                                            <DialogDescription>
-                                                This action cannot be undone. This will permanently delete your
-                                                service and remove your data from our servers.
-                                            </DialogDescription>
-                                        </DialogHeader>
+      {/* 🧩 Services List */}
+      {filteredServices && filteredServices.length > 0 ? (
+        <ul>
+          {filteredServices.map((service) => (
+            <li key={service.service_id} className="border p-4 mb-4 rounded">
 
-                                        <Button
-                                            onClick={() => deleteService(service.service_id.toString())}
-                                            variant="destructive"
-                                            className="w-full"
-                                        >
-                                            Delete Permanently
-                                        </Button>
-                                    </DialogContent>
-                                </Dialog>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            ) : (
-                //❗ Message if no services found
-                <p>No services found.</p>
-            )}
+              <a href={`/singleservice/${service.service_id}`}>
+                <FetchServiceCard
+                  serviceItem={service}
+                  service_image={service.service_image || ""}
+                  service_name={service.service_name}
+                  category={service.category}
+                  price={service.price}
+                />
+              </a>
 
+              {/* ✏️ Update Button */}
+              <Button
+                onClick={() => updateService(service.service_id.toString())}
+                className="mt-3 flex gap-2"
+              >
+                <Edit className="w-4 h-4" /> Update Service
+              </Button>
 
-        </div>
-    )
+              {/* ❌ Delete Button */}
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="destructive" className="mt-2 flex gap-2">
+                    <Trash2 className="w-4 h-4" /> Delete Service
+                  </Button>
+                </DialogTrigger>
+
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Are you absolutely sure?</DialogTitle>
+                    <DialogDescription>
+                      This action cannot be undone. This will permanently delete your service.
+                    </DialogDescription>
+                  </DialogHeader>
+
+                  <Button
+                    onClick={() => deleteService(service.service_id.toString())}
+                    variant="destructive"
+                    className="w-full"
+                  >
+                    Delete Permanently
+                  </Button>
+                </DialogContent>
+              </Dialog>
+
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="text-gray-500">No services found.</p>
+      )}
+
+    </div>
+  )
 }
 
 export default page
