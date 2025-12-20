@@ -57,7 +57,7 @@ const page = () => {
       {filteredServices && filteredServices.length > 0 ? (
         filteredServices.map((serviceItem) => (
           <a
-            href={`/singleservice/${serviceItem.service_id}`}
+            href={`/service/${serviceItem.service_id}`}
             key={serviceItem.service_id}
           >
             <FetchServiceCard

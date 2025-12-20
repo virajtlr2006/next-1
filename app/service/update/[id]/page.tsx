@@ -72,8 +72,8 @@ const UpdateServicePage = () => {
       const res = await updateServiceAction(id, payload);
 
       if (res.success) {
-        alert("Service updated successfully!");
-        router.push("/allservice");
+        // alert("Service updated successfully!");
+        router.push(`/singleservice/${id}`);
       } else {
         alert(res.message || "Update failed");
       }

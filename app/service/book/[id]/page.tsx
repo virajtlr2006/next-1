@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { useCurrentUser } from '@/hook/hook'
 import { bookServiceAction } from '@/actions/bookServiceAction'
@@ -17,6 +17,7 @@ const Book = () => {
 
   // Logged-in user
   const { email, fullName } = useCurrentUser()
+  const router = useRouter()
 
   // React Hook Form
   const {
@@ -32,6 +33,7 @@ const Book = () => {
       alert('User not authenticated')
       return
     }
+
     const bookingData = {
       service_id: Number(id),
       user_email: email,
@@ -44,9 +46,9 @@ const Book = () => {
 
     //If result is true service booked successfully
     if (result?.success) {
-      alert('Service Booked Successfully')
-      reset()
-    } 
+            reset()
+      router.push(`/service/${id}`)
+    }
     //If booking failed
     else {
       alert('Booking Failed')

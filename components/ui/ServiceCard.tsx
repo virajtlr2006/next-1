@@ -12,15 +12,22 @@ import {
 } from "@/components/ui/dialog";
 import { Edit, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { deleteServiceAction } from "@/actions/serviceActions";
 
 interface ServiceCardProps {
   service: service;
   isOwner: boolean;
-  onDelete: (id: string) => void;
 }
 
-const ServiceCard = ({ service, isOwner, onDelete }: ServiceCardProps) => {
+const ServiceCard = ({ service, isOwner }: ServiceCardProps) => {
   const router = useRouter();
+
+    const deleteService = async (id: string) => {
+    const res = await deleteServiceAction(id);
+    if (res.success) {
+      router.push("/service");
+    }
+  };
 
   return (
     <div className="max-w-3xl mx-auto p-6 border rounded-xl shadow bg-white space-y-4">
@@ -51,7 +58,7 @@ const ServiceCard = ({ service, isOwner, onDelete }: ServiceCardProps) => {
 
           {/* Update */}
           <Button
-            onClick={() => router.push(`/updateservice/${service.service_id}`)}
+            onClick={() => router.push(`/service/update/${service.service_id}`)}
             className="bg-gradient-to-r from-blue-500 to-cyan-500 flex gap-2"
           >
             <Edit className="w-4 h-4" />
@@ -78,7 +85,7 @@ const ServiceCard = ({ service, isOwner, onDelete }: ServiceCardProps) => {
               </DialogHeader>
 
               <Button
-                onClick={() => onDelete(String(service.service_id))}
+                onClick={() => deleteService(String(service.service_id))}
                 className="bg-red-600 hover:bg-red-700 w-full"
               >
                 Confirm Delete
@@ -88,8 +95,12 @@ const ServiceCard = ({ service, isOwner, onDelete }: ServiceCardProps) => {
         </div>
       )}
       {!isOwner && (
-        <Button><a href={`/bookservice/${service.service_id}`}>Book Now</a></Button>
+        <Button><a href={`/service/book/${service.service_id}`}>Book Now</a></Button>
       ) }
+
+      {isOwner && 
+      <div>
+        All Bokkings</div>}
     </div>
   );
 };

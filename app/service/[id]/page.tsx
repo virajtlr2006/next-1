@@ -27,25 +27,18 @@ const Page = () => {
     }
   };
 
-  const deleteService = async (id: string) => {
-    const res = await deleteServiceAction(id);
-    if (res.success) {
-      router.push("/allservice");
-    }
-  };
 
   if (!serviceData) return <p>Loading service details...</p>;
 
   return (
     <div className="p-6">
-      <a href="/allservice" className="text-blue-500 underline">
+      <a href="/service" className="text-blue-500 underline">
         ← Back To All Services
       </a>
 
       <ServiceCard
         service={serviceData}
         isOwner={isOwner}
-        onDelete={deleteService}
       />
     </div>
   );

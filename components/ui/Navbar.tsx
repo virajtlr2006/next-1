@@ -18,9 +18,9 @@ const Navbar = () => {
             <a href='/' className="flex items-center gap-2"><Layers className="w-8 h-8 text-blue-600" />ServeStack</a>
             <div className='flex gap-10 ml-50'>
                 <a href='/' className=''>Home</a>
-                <a href='/allservice'>Explore Services</a>
-                <a href='/myservices'>My Services</a>
-                <a href='/newservice'>Add Services</a>
+                <a href='/service'>Explore Services</a>
+                <a href='/service/my'>My Services</a>
+                <a href='/service/new'>Add Services</a>
             </div>
 
             {/* Authentication Through Clerk */}
