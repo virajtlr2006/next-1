@@ -77,7 +77,7 @@ const UpdateServicePage = () => {
       const res = await updateServiceAction(id, payload);
 
       if (res.success) {
-        router.push(`/single/my/${id}`);
+        router.push(`/single/${id}`);
         toast.success("Service Updated Successfully")
 
       } else {
