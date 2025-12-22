@@ -77,15 +77,13 @@ const UpdateServicePage = () => {
       const res = await updateServiceAction(id, payload);
 
       if (res.success) {
-        router.push(`/single/${id}`);
+        router.push(`/single/my/${id}`);
         toast.success("Service Updated Successfully")
 
       } else {
-        alert(res.message || "Update failed");
         toast.error("Failed To Update Service")
       }
     } catch (error) {
-      console.error(error);
       toast.info("Something went wrong");
     }
   };
