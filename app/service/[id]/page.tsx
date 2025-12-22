@@ -9,6 +9,9 @@ import { ArrowLeft, Heart, Share2 } from "lucide-react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import {
+  WhatsappShareButton, WhatsappIcon
+} from "react-share";
 
 const Page = () => {
   const [serviceData, setServiceData] = useState<service | null>(null);
@@ -53,26 +56,24 @@ const Page = () => {
               >
                 <Heart className="w-4 h-4" />
               </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                className="border-slate-700 text-slate-gray hover:text-white hover:bg-slate-800 bg-transparent"
-              >
-                <Share2 className="w-4 h-4" />
-              </Button>
-            </div>
+
+              <WhatsappShareButton className="border-slate-700 text-slate-gray hover:text-white hover:bg-slate-800 bg-transparent" url={`https://next-1-c7bo.vercel.app/service/${id}`} title={"VCheck out amazing Service"}>
+                <WhatsappIcon size={33} round />
+              </WhatsappShareButton>
 
             </div>
+
           </div>
         </div>
-
-
-        <ServiceCard
-          service={serviceData}
-          isOwner={isOwner}
-        />
       </div>
-      );
+
+
+      <ServiceCard
+        service={serviceData}
+        isOwner={isOwner}
+      />
+    </div>
+  );
 };
 
-      export default Page;
+export default Page;
