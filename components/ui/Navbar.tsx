@@ -58,7 +58,7 @@ const Navbar = () => {
                         Home
                     </Link>
 
-                    <Link href="/categories" className="text-sm text-slate-gray hover:text-white transition-all duration-200 hover:scale-105">
+                    <Link href="/service" className="text-sm text-slate-gray hover:text-white transition-all duration-200 hover:scale-105">
                         Categories
                     </Link>
 

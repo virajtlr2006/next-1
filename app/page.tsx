@@ -43,7 +43,7 @@ export default function HomePage() {
               your fingertips. From home repairs to wellness, we've got you covered.
             </p>
             <div className="flex flex-wrap gap-4 justify-center pt-4">
-              <Link href='categories'>
+              <Link href='/service'>
               <Button
                 size="lg"
                 className="bg-navy hover:bg-navy-dark text-white transition-all duration-300 hover:shadow-xl hover:shadow-navy/50 hover:scale-105"
