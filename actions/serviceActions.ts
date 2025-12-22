@@ -80,7 +80,7 @@ export const updateServiceAction = async (id: string,data: Partial<service>) => 
       .where(eq(serviceTable.service_id, Number(id)))
       .returning();
 
-    // console.log("🟢 UPDATE RESULT:", updated);
+    console.log("🟢 UPDATE RESULT:", updated);
 
     if (updated.length === 0) {
       return {

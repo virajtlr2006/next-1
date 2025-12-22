@@ -43,8 +43,8 @@ const page = () => {
   }
 
   const updateService = (id: string) => {
-    router.push(`/service/my/${id}`)
     toast.success("Service Updated Successfully.")
+    router.push(`/service/${id}`)
   }
 
   const filteredServices = services?.filter((serviceItem) =>

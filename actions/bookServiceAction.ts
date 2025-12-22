@@ -13,9 +13,7 @@ export const bookServiceAction = async (
         ...data,
         service_id: Number(service_id),
       })
-      .returning(
-
-      )
+      .returning()
 
     return { success: true, data: result }
   } catch (error) {
