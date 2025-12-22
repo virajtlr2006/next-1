@@ -10,6 +10,9 @@ import {
   UserButton,
 } from '@clerk/nextjs'
 import Navbar from "@/components/ui/Navbar";
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,10 +40,21 @@ export default function RootLayout({
         <Navbar/>
       <html lang="en">
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+          
           <header className="flex justify-end items-center p-4 gap-4 h-16">
 
           </header>
           {children}
+          <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          pauseOnHover
+          theme="dark"
+        />
+          
         </body>
       </html>
     </ClerkProvider>

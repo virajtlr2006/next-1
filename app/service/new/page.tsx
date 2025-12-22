@@ -7,6 +7,7 @@ import { useCurrentUser } from '@/hook/hook'
 import { useRouter } from "next/navigation"
 import React, { useState } from 'react'
 import { useForm, SubmitHandler } from "react-hook-form"
+import { toast } from 'react-toastify'
 
 
 const page = () => {
@@ -26,13 +27,17 @@ const page = () => {
     try {
       if (!email) {
         setIsError("Sign up first to add services")
+        toast.info("Please SignUp First")
         return
       }
       const newdata = { ...data, email: email || "" }
       await CreateServiceAction(newdata)
+      toast.success("Service Created Successfully")
       router.push('/service')
+
     } catch (error) {
       setIsError("Error adding service")
+      toast.error("Error adding Service")
     }
   }
 

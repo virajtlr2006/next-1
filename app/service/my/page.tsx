@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button"
 import { Edit, Trash2, Search } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import FetchServiceCard from '@/components/ui/FetchServiceCard'
+import { toast } from 'react-toastify'
 
 const page = () => {
 
@@ -38,6 +39,7 @@ const page = () => {
     if ((response as { success: boolean }).success) {
       fetchMyServices(email as string)
     }
+    toast.success("Service Deleted Successfully")
   }
 
   const updateService = (id: string) => {

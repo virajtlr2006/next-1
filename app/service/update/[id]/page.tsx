@@ -12,6 +12,7 @@ import { useForm } from "react-hook-form";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import { toast } from "react-toastify";
 
 const UpdateServicePage = () => {
   const params = useParams();
@@ -77,12 +78,15 @@ const UpdateServicePage = () => {
 
       if (res.success) {
         router.push(`/single/${id}`);
+        toast.success("Service Updated Successfully")
+
       } else {
         alert(res.message || "Update failed");
+        toast.error("Failed To Update Service")
       }
     } catch (error) {
       console.error(error);
-      alert("Something went wrong");
+      toast.info("Something went wrong");
     }
   };
 

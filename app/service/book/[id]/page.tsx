@@ -14,6 +14,8 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
+import { toast } from 'react-toastify';
+
 
 type BookingForm = {
   booking_date: string
@@ -51,8 +53,9 @@ const Book = () => {
     if (result?.success) {
       reset()
       setBookingSuccess(true)
+       toast.success("Service Booked successfully!");
     } else {
-      alert('Booking Failed')
+      toast.error("Booking Failed")
     }
   }
 
