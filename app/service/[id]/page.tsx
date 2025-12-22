@@ -1,9 +1,12 @@
 "use client";
 
 import { deleteServiceAction, singleServiceAction } from "@/actions/serviceActions";
+import { Button } from "@/components/ui/button";
 import ServiceCard from "@/components/ui/ServiceCard";
 import { service } from "@/db/schema";
 import { useCurrentUser } from "@/hook/hook";
+import { ArrowLeft, Heart, Share2 } from "lucide-react";
+import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -31,17 +34,45 @@ const Page = () => {
   if (!serviceData) return <p>Loading service details...</p>;
 
   return (
-    <div className="p-6">
-      <a href="/service" className="text-blue-500 underline">
-        ← Back To All Services
-      </a>
+    <div >
+      <div className="bg-slate-900/30 border-b border-slate-800">
+        <div className="container mx-auto px-4 lg:px-8 py-4">
+          <div className="flex items-center justify-between">
+            <Link href="/service">
+              <Button variant="ghost" className="text-slate-gray hover:text-white">
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back to Services
+              </Button>
+            </Link>
 
-      <ServiceCard
-        service={serviceData}
-        isOwner={isOwner}
-      />
-    </div>
-  );
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="icon"
+                className="border-slate-700 text-slate-gray hover:text-white hover:bg-slate-800 bg-transparent"
+              >
+                <Heart className="w-4 h-4" />
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                className="border-slate-700 text-slate-gray hover:text-white hover:bg-slate-800 bg-transparent"
+              >
+                <Share2 className="w-4 h-4" />
+              </Button>
+            </div>
+
+            </div>
+          </div>
+        </div>
+
+
+        <ServiceCard
+          service={serviceData}
+          isOwner={isOwner}
+        />
+      </div>
+      );
 };
 
-export default Page;
+      export default Page;

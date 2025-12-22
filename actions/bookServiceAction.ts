@@ -1,25 +1,23 @@
 'use server'
+import { bookingTable, newBooking } from "@/db/schema"
+import { db } from ".."
 
-import { db } from '..'
-import { bookingTable, newBooking } from '@/db/schema'
-
-// Book Service Action
 export const bookServiceAction = async (
-    // Service id
   service_id: string,
   data: newBooking
 ) => {
   try {
-    // Insert data in database
-    const result = await db.insert(bookingTable).values({
-      ...data,
-      service_id: Number(service_id), // ✅ FIX
+    const result = await db
+    .insert(bookingTable).values({
+      service_id: Number(service_id),
+      user_email: data.user_email,
+      user_name: data.user_name,
+      booking_date: data.booking_date,
     }).returning()
 
     return { success: true, data: result }
   } catch (error) {
-    // Shows error if any
     console.error('Booking error:', error)
-    return { success: false }
+    return { success: false, error: (error as Error).message } // <-- Return error message
   }
 }
