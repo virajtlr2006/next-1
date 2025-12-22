@@ -5,13 +5,19 @@ import { Button } from "@/components/ui/button";
 import ServiceCard from "@/components/ui/ServiceCard";
 import { service } from "@/db/schema";
 import { useCurrentUser } from "@/hook/hook";
-import { ArrowLeft, Heart, Share2 } from "lucide-react";
+import { ArrowLeft, Heart, MailSearch, Share2 } from "lucide-react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
-  WhatsappShareButton, WhatsappIcon
-} from "react-share";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { WhatsappShareButton, WhatsappIcon, FacebookShareButton, FacebookIcon, InstapaperShareButton, InstapaperIcon, MailruShareButton, TwitterShareButton, TwitterIcon, EmailShareButton, EmailIcon, } from "react-share"
 
 const Page = () => {
   const [serviceData, setServiceData] = useState<service | null>(null);
@@ -57,9 +63,57 @@ const Page = () => {
                 <Heart className="w-4 h-4" />
               </Button>
 
-              <WhatsappShareButton className="border-slate-700 text-slate-gray hover:text-white hover:bg-slate-800 bg-transparent" url={`https://next-1-c7bo.vercel.app/service/${id}`} title={"VCheck out amazing Service"}>
-                <WhatsappIcon size={33} round />
-              </WhatsappShareButton>
+
+              <Dialog>
+                <DialogTrigger>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="border-slate-700 text-slate-gray hover:text-white hover:bg-slate-800 bg-transparent">
+                    <Share2 className="w-4 h-4" />
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-sm rounded-2xl border border-slate-800 bg-slate-900/95 backdrop-blur-md">
+                  <DialogHeader>
+                    <DialogTitle className="text-center text-lg font-semibold text-white">
+                      Share this service
+                    </DialogTitle>
+                    <p className="text-center text-sm text-slate-400 mt-1">
+                      Spread the word with your network 🚀
+                    </p>
+                  </DialogHeader>
+
+                  <div className="flex justify-around mt-6">
+                    {/* WhatsApp */}
+
+                    <WhatsappShareButton url={`https://next-1-c7bo.vercel.app/service/${id}`}>
+                      <WhatsappIcon size={48} round />
+                    </WhatsappShareButton>
+
+
+                    {/* Facebook */}
+
+                    <FacebookShareButton url={`https://next-1-c7bo.vercel.app/service/${id}`}>
+                      <FacebookIcon size={48} round />
+                    </FacebookShareButton>
+
+
+                    {/* Twitter */}
+                    <TwitterShareButton url={`https://next-1-c7bo.vercel.app/service/${id}`}>
+                      <TwitterIcon size={48} round />
+                    </TwitterShareButton>
+
+
+                    {/* Email */}
+
+                    <EmailShareButton url={`https://next-1-c7bo.vercel.app/service/${id}`}>
+                      <EmailIcon size={48} round />
+                    </EmailShareButton>
+
+                  </div>
+                </DialogContent>
+
+              </Dialog>
 
             </div>
 
